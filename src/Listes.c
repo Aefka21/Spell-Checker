@@ -60,15 +60,19 @@ Liste parcourir(FILE * f, char * mot) {
     Liste correction;
     int test_valeur, d, dmin;
     char * tmp_mot;
+    int hasMin = 0;
     tmp_mot = malloc(100 * sizeof(char));
-    dmin = 999999999;
     correction = NULL;
     rewind(f);
     do {
         test_valeur = fscanf(f, "%s\n", tmp_mot);
         d = Levenshtein(tmp_mot, mot);
-        if (d <= dmin) {
-            if (d < dmin) {
+        if (!hasMin || d <= dmin) {
+            if (!hasMin) {
+                hasMin = 1;
+                dmin =  d;
+                liberer_Liste(&correction);
+            } else if (d < dmin) {
                 dmin = d;
                 liberer_Liste(&correction);
             }
